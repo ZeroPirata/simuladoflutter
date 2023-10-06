@@ -10,6 +10,21 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  TextEditingController _email = TextEditingController();
+  TextEditingController _senha = TextEditingController();
+
+  void handleEmail(TextEditingController value) {
+    setState(() {
+      _email = value;
+    });
+  }
+
+  void handleSenha(TextEditingController value) {
+    setState(() {
+      _senha = value;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,12 +57,27 @@ class _HomeState extends State<Home> {
               height: 50,
             ),
             SizedBox(
+              width: 350,
+              height: 250,
+              child: Column(children: [
+                const Text("Usuario"),
+                TextField(
+                  controller: _email,
+                ),
+                const Text("Senha"),
+                TextField(
+                  controller: _senha,
+                  obscureText: true,
+                )
+              ]),
+            ),
+            SizedBox(
               width: 250,
               height: 50,
               child: ElevatedButton(
                 onPressed: () {
                   Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => const Forms()));
+                      MaterialPageRoute(builder: (context) => Forms(email: _email,)));
                 },
                 style: ElevatedButton.styleFrom(
                   alignment: Alignment.center,

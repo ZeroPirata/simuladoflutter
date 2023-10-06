@@ -2,42 +2,59 @@ import 'package:flutter/material.dart';
 import 'package:simulado/tempofunc.dart';
 
 class FormsFuncoes extends StatefulWidget {
-  const FormsFuncoes({super.key, required this.funcionario});
+  const FormsFuncoes({super.key, required this.curso, required this.conclusaoTecnico, required this.user});
 
-  final String funcionario;
+  final String curso;
+  final String user;
+  final TextEditingController conclusaoTecnico;
 
   @override
   State<FormsFuncoes> createState() => _FormsFuncoesState();
 }
 
 class _FormsFuncoesState extends State<FormsFuncoes> {
-  List<String> funcoesDaEmpresa = [
-    "Gerente Geral",
-    "Gerente de Recursos Humanos",
-    "Gerente de Vendas",
-    "Gerente de Marketing",
-    "Gerente de Finanças",
-    "Analista de Dados",
-    "Desenvolvedor de Software",
-    "Designer Gráfico",
-    "Especialista em Marketing Digital",
-    "Gerente de Projetos",
-    "Assistente Administrativo",
-    "Analista de Recursos Humanos",
-    "Contador",
-    "Analista de Qualidade",
-    "Analista de Suporte Técnico",
+  final List<String> niveisGraduacao = [
+    "Bacharelado",
+    "Licenciatura",
+    "Mestrado",
+    "Doutorado",
+    "Pós-Graduação",
+    "Graduação Tecnológica",
+    "Especialização",
+    "Diploma",
+    "Associado",
+    "Certificação",
   ];
+
   String _selectItem = "";
   void changeSelectedItem(String e) {
     setState(() {
       _selectItem = e;
     });
+  }  
+  TextEditingController _conclusao = TextEditingController();
+  @override
+  void dispose() {
+    _conclusao.dispose();
+    super.dispose();
   }
+
+    void handleConclusao(TextEditingController e) {
+    setState(() {
+      _conclusao = e;
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
-    String funcionario = widget.funcionario;
+
+    String userCurso = widget.curso;
+    String user = widget.user;
+    String conclusaoUser = widget.conclusaoTecnico.text;
+
+
     return Scaffold(
         body: Align(
       alignment: Alignment.center,
@@ -47,12 +64,12 @@ class _FormsFuncoesState extends State<FormsFuncoes> {
         children: [
           const SizedBox(height: 50.0),
           Text(
-            "Funcionario Selecionado\n$funcionario",
+            "Usuario: $user",
             style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
           const Divider(),
           const Text(
-            'Selecionar Função',
+            'Selecionar Graduação',
             style: TextStyle(fontSize: 24.0, color: Colors.blue),
           ),
           const Divider(),
@@ -67,22 +84,31 @@ class _FormsFuncoesState extends State<FormsFuncoes> {
             ),
             child: ListView.builder(
               shrinkWrap: true,
-              itemCount: funcoesDaEmpresa.length,
+              itemCount: niveisGraduacao.length,
               itemBuilder: (BuildContext context, int index) {
                 return ListTile(
-                  title: _selectItem == funcoesDaEmpresa[index]
+                  title: _selectItem == niveisGraduacao[index]
                       ? Text(
-                          funcoesDaEmpresa[index],
+                          niveisGraduacao[index],
                           style: const TextStyle(color: Colors.red),
                         )
-                      : Text(funcoesDaEmpresa[index]),
+                      : Text(niveisGraduacao[index]),
                   onTap: () {
-                    changeSelectedItem(funcoesDaEmpresa[index]);
+                    changeSelectedItem(niveisGraduacao[index]);
                   },
                 );
               },
             ),
           ),
+          const SizedBox(height: 16.0),
+            SizedBox(
+              width: 350,
+              height: 35,
+              child: TextField(
+                  controller: _conclusao,
+                  keyboardType: TextInputType.number,
+                )
+            ),
           const SizedBox(height: 16.0),
           SizedBox(
             width: 250,
@@ -93,8 +119,11 @@ class _FormsFuncoesState extends State<FormsFuncoes> {
                     context,
                     MaterialPageRoute(
                         builder: (context) => TempoFunc(
-                              funcionario: funcionario,
-                              funcao: _selectItem,
+                              usuario: user,
+                              curso: userCurso,
+                              cursoTempo: conclusaoUser,
+                              graduacao: _selectItem,
+                              graduacaoTempo: _conclusao.text,
                             )));
               },
               style: ElevatedButton.styleFrom(
